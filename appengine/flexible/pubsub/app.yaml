@@ -7,8 +7,8 @@ runtime_config:
 
 # [START gae_flex_pubsub_env]
 env_variables:
-    PUBSUB_TOPIC: your-topic
+    PUBSUB_TOPIC: iotlab
     # This token is used to verify that requests originate from your
     # application. It can be any sufficiently random string.
-    PUBSUB_VERIFICATION_TOKEN: 1234abc
+    PUBSUB_VERIFICATION_TOKEN: 10201986
 # [END gae_flex_pubsub_env]
