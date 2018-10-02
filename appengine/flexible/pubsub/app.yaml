@@ -7,7 +7,11 @@ runtime_config:
 
 # [START gae_flex_pubsub_env]
 env_variables:
+<<<<<<< HEAD
     PUBSUB_TOPIC: iotlab
+=======
+    PUBSUB_TOPIC: /devices/temp-sensor-buenos-aires/config
+>>>>>>> 0d8904814cd89c60246d77bcbd63232fa4c60c7d
     # This token is used to verify that requests originate from your
     # application. It can be any sufficiently random string.
     PUBSUB_VERIFICATION_TOKEN: 10201986
