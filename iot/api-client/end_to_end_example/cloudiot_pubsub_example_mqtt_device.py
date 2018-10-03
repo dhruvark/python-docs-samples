@@ -110,6 +110,9 @@ class Device(object):
         self.mintemp = 70
         self.maxtemp = 72
         self.simtemp = random.uniform(self.mintemp, self.maxtemp)
+        self.simhumidity = random.uniform(20, 30)
+        self.simpressure = random.uniform(45, 50)
+        self.simdewpoint = random.uniform(60, 70)
         self.increase = False
         self.connected = False
 
@@ -313,8 +316,9 @@ def main():
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = json.dumps({'temperature': device.simtemp})
-        print('Publishing payload', payload)
+        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(self.simtemp,3), "humidity": round(self.simhumidity,3), "pressure": round(self.simpressure,3), "dewpoint": round(self.simdewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
+        jsonpayload = json.dumps(payload,indent=4)
+        print('Publishing payload --> ', payload)
 
         # [START iot_mqtt_jwt_refresh]
         seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
