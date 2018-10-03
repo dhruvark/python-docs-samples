@@ -316,7 +316,7 @@ def main():
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(self.simtemp,3), "humidity": round(self.simhumidity,3), "pressure": round(self.simpressure,3), "dewpoint": round(self.simdewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
+        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(device.simtemp,3), "humidity": round(device.simhumidity,3), "pressure": round(device.simpressure,3), "dewpoint": round(device.simdewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
         jsonpayload = json.dumps(payload,indent=4)
         print('Publishing payload --> ', payload)
 
@@ -335,9 +335,9 @@ def main():
         # delivery. Cloud IoT Core also supports qos=0 for at most once
         # delivery.
         
-        client.publish(mqtt_telemetry_topic, payload, qos=1)
+        client.publish(mqtt_telemetry_topic, jsonpayload, qos=1)
         # Send events every second.
-        time.sleep(1)
+        time.sleep(1 if args.message_type == 'event' else 5)
 
     client.disconnect()
     client.loop_stop()
