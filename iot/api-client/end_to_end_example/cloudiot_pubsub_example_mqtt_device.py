@@ -308,6 +308,7 @@ def main():
         
 		################# Metric Simulation ##########################################################################
 		sim_temp = random.uniform(device.mintemp, device.maxtemp)
+		print(sim_temp);
         sim_humidity = random.uniform(20, 30)
         sim_pressure = random.uniform(45, 50)
         sim_dewpoint = random.uniform(60, 70)
