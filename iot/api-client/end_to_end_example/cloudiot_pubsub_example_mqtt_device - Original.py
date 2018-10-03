@@ -47,55 +47,23 @@ import json
 import os
 import ssl
 import time
-import random
+
 import jwt
 import paho.mqtt.client as mqtt
 
 
-# The initial backoff time after a disconnection occurs, in seconds.
-minimum_backoff_time = 1
-
-# The maximum backoff time before giving up, in seconds.
-MAXIMUM_BACKOFF_TIME = 32
-
-# Whether to wait with exponential backoff before publishing.
-should_backoff = False
-
-
-# [START iot_mqtt_jwt]
 def create_jwt(project_id, private_key_file, algorithm):
-    """Creates a JWT (https://jwt.io) to establish an MQTT connection.
-        Args:
-         project_id: The cloud project ID this device belongs to
-         private_key_file: A path to a file containing either an RSA256 or
-                 ES256 private key.
-         algorithm: The encryption algorithm to use. Either 'RS256' or 'ES256'
-        Returns:
-            An MQTT generated from the given project_id and private key, which
-            expires in 20 minutes. After 20 minutes, your client will be
-            disconnected, and a new JWT will have to be generated.
-        Raises:
-            ValueError: If the private_key_file does not contain a known key.
-        """
-
+    """Create a JWT (https://jwt.io) to establish an MQTT connection."""
     token = {
-            # The time that the token was issued at
-            'iat': datetime.datetime.utcnow(),
-            # The time the token expires.
-            'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=2),
-            # The audience field should always be set to the GCP project id.
-            'aud': project_id
+        'iat': datetime.datetime.utcnow(),
+        'exp': datetime.datetime.utcnow() + datetime.timedelta(minutes=60),
+        'aud': project_id
     }
-
-    # Read the private key file.
     with open(private_key_file, 'r') as f:
         private_key = f.read()
-
     print('Creating JWT using {} from private key file {}'.format(
-            algorithm, private_key_file))
-
+        algorithm, private_key_file))
     return jwt.encode(token, private_key, algorithm=algorithm)
-# [END iot_mqtt_jwt]
 
 
 def error_str(rc):
@@ -107,9 +75,8 @@ class Device(object):
     """Represents the state of a single device."""
 
     def __init__(self):
-        self.mintemp = 70
-        self.maxtemp = 72
-        self.increase = False
+        self.temperature = 0
+        self.fan_on = False
         self.connected = False
 
     def update_sensor_data(self):
@@ -117,10 +84,10 @@ class Device(object):
         If the fan is on, assume the temperature decreased one degree,
         otherwise assume that it increased one degree.
         """
-        if self.increase:
-            self.mintemp = 70
+        if self.fan_on:
+            self.temperature -= 1
         else:
-            self.maxtemp = 72
+            self.temperature += 1
 
     def wait_for_connection(self, timeout):
         """Wait for the device to become connected."""
@@ -136,10 +103,6 @@ class Device(object):
         """Callback for when a device connects."""
         print('Connection Result:', error_str(rc))
         self.connected = True
-        # Since a disconnect occurred, the next loop iteration will wait with
-        # exponential backoff.
-        global should_backoff
-        should_backoff = True
 
     def on_disconnect(self, unused_client, unused_userdata, rc):
         """Callback for when a device disconnects."""
