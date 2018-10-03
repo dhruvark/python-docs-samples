@@ -109,6 +109,7 @@ class Device(object):
     def __init__(self):
         self.mintemp = 70
         self.maxtemp = 72
+        self.simtemp = random.uniform(self.mintemp, self.maxtemp)
         self.increase = False
         self.connected = False
 
@@ -301,13 +302,13 @@ def main():
                 minimum_backoff_time *= 2
                 client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
         
-        # In an actual device, this would read the device's sensors. Here,
+        # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
         device.update_sensor_data()
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = json.dumps({'temperature': device.temperature})
+        payload = json.dumps({'temperature': device.simtemp})
         print('Publishing payload', payload)
 
         # [START iot_mqtt_jwt_refresh]
