@@ -316,10 +316,11 @@ def main():
         # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
         device.update_sensor_data()
+		sim_temp = random.uniform(device.mintemp, device.maxtemp)
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(device.mintemp,3), "humidity": round(sim_humidity,3), "pressure": round(sim_pressure,3), "dewpoint": round(sim_dewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
+        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(sim_temp,3), "humidity": round(sim_humidity,3), "pressure": round(sim_pressure,3), "dewpoint": round(sim_dewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
         jsonpayload = json.dumps(payload,indent=4)
         print('Publishing payload --> ', payload)
 
