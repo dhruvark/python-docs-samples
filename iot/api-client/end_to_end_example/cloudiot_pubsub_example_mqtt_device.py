@@ -307,8 +307,7 @@ def main():
                 client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
         
 		################# Metric Simulation ##########################################################################
-		sim_temp = random.uniform(device.mintemp, device.maxtemp)
-		print(sim_temp);
+		#sim_temp = random.uniform(device.mintemp, device.maxtemp)
         sim_humidity = random.uniform(20, 30)
         sim_pressure = random.uniform(45, 50)
         sim_dewpoint = random.uniform(60, 70)
@@ -320,7 +319,7 @@ def main():
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(sim_temp,3), "humidity": round(sim_humidity,3), "pressure": round(sim_pressure,3), "dewpoint": round(sim_dewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
+        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(device.mintemp,3), "humidity": round(sim_humidity,3), "pressure": round(sim_pressure,3), "dewpoint": round(sim_dewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
         jsonpayload = json.dumps(payload,indent=4)
         print('Publishing payload --> ', payload)
 
