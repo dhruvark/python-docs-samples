@@ -226,6 +226,11 @@ def parse_command_line_args():
         default='event',
         help=('Indicates whether the message to be published is a '
               'telemetry event or a device state message.'))
+    parser.add_argument(
+        '--jwt_expires_minutes',
+        default=2,
+        type=int,
+        help=('Expiration time, in minutes, for JWT tokens.'))
 
     return parser.parse_args()
 
