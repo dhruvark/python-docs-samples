@@ -137,15 +137,20 @@ class Device(object):
         """Callback for when a device connects."""
         print('Connection Result:', error_str(rc))
         self.connected = True
-        # Since a disconnect occurred, the next loop iteration will wait with
-        # exponential backoff.
+        # After a successful connect, reset backoff time and stop backing off.
         global should_backoff
-        should_backoff = True
+        global minimum_backoff_time
+        should_backoff = False
+        minimum_backoff_time = 1
 
     def on_disconnect(self, unused_client, unused_userdata, rc):
         """Callback for when a device disconnects."""
         print('Disconnected:', error_str(rc))
         self.connected = False
+        # Since a disconnect occurred, the next loop iteration will wait with
+        # exponential backoff.
+        global should_backoff
+        should_backoff = True
 
     def on_publish(self, unused_client, unused_userdata, unused_mid):
         """Callback when the device receives a PUBACK from the MQTT bridge."""
