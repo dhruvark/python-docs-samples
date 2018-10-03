@@ -172,14 +172,14 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
-        if data['fan_on'] != self.fan_on:
+        if data['increase'] != self.increase:
             # If changing the state of the fan, print a message and
             # update the internal state.
-            self.fan_on = data['fan_on']
-            if self.fan_on:
-                print('Fan turned on.')
+            self.increase = data['increase']
+            if self.increase:
+                print('Min temp adjusted')
             else:
-                print('Fan turned off.')
+                print('Max temp adjusted')
 
 
 def parse_command_line_args():
@@ -232,6 +232,10 @@ def parse_command_line_args():
 
 def main():
     args = parse_command_line_args()
+    global minimum_backoff_time
+
+    jwt_iat = datetime.datetime.utcnow()
+    jwt_exp_mins = args.jwt_expires_minutes
 
     # Create the MQTT client and connect to Cloud IoT.
     client = mqtt.Client(
@@ -275,6 +279,23 @@ def main():
 
     # Update and publish temperature readings at a rate of one per second.
     for _ in range(args.num_messages):
+
+        for i in range(1, args.num_messages + 1):
+        # Process network events.
+        # Wait if backoff is required.
+            if should_backoff:
+                # If backoff time is too large, give up.
+                if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
+                    print('Exceeded maximum backoff time. Giving up.')
+                    break
+
+                # Otherwise, wait and connect again.
+                delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
+                print('Waiting for {} before reconnecting.'.format(delay))
+                time.sleep(delay)
+                minimum_backoff_time *= 2
+                client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+        
         # In an actual device, this would read the device's sensors. Here,
         # you update the temperature based on whether the fan is on.
         device.update_sensor_data()
@@ -283,6 +304,22 @@ def main():
         # as a JSON string.
         payload = json.dumps({'temperature': device.temperature})
         print('Publishing payload', payload)
+
+        # [START iot_mqtt_jwt_refresh]
+        seconds_since_issue = (datetime.datetime.utcnow() - jwt_iat).seconds
+        if seconds_since_issue > 60 * jwt_exp_mins:
+            print('Refreshing token after {}s').format(seconds_since_issue)
+            jwt_iat = datetime.datetime.utcnow()
+            client = get_client(
+                args.project_id, args.cloud_region,
+                args.registry_id, args.device_id, args.private_key_file,
+                args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
+                args.mqtt_bridge_port)
+        # [END iot_mqtt_jwt_refresh]
+        # Publish "payload" to the MQTT topic. qos=1 means at least once
+        # delivery. Cloud IoT Core also supports qos=0 for at most once
+        # delivery.
+        
         client.publish(mqtt_telemetry_topic, payload, qos=1)
         # Send events every second.
         time.sleep(1)
