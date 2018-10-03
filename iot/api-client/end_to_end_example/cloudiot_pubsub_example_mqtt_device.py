@@ -109,10 +109,6 @@ class Device(object):
     def __init__(self):
         self.mintemp = 70
         self.maxtemp = 72
-        self.simtemp = random.uniform(self.mintemp, self.maxtemp)
-        self.simhumidity = random.uniform(20, 30)
-        self.simpressure = random.uniform(45, 50)
-        self.simdewpoint = random.uniform(60, 70)
         self.increase = False
         self.connected = False
 
@@ -310,13 +306,20 @@ def main():
                 minimum_backoff_time *= 2
                 client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
         
+		################# Metric Simulation ##########################################################################
+		sim_temp = random.uniform(device.mintemp, device.maxtemp)
+        sim_humidity = random.uniform(20, 30)
+        sim_pressure = random.uniform(45, 50)
+        sim_dewpoint = random.uniform(60, 70)
+		
+		
         # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
         device.update_sensor_data()
 
         # Report the device's temperature to the server by serializing it
         # as a JSON string.
-        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(device.simtemp,3), "humidity": round(device.simhumidity,3), "pressure": round(device.simpressure,3), "dewpoint": round(device.simdewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
+        payload = {"timestamp": int(time.time()), "device": args.device_id, "temperature": round(sim_temp,3), "humidity": round(sim_humidity,3), "pressure": round(sim_pressure,3), "dewpoint": round(sim_dewpoint,3), "Longitude": 37.4219999, "Latitude": -122.0840575}
         jsonpayload = json.dumps(payload,indent=4)
         print('Publishing payload --> ', payload)
 
