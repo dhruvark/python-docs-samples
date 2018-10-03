@@ -88,16 +88,16 @@ class Server(object):
         print('The device ({}) has a temperature '
               'of: {}'.format(device_id, data['temperature']))
         if data['temperature'] < 70:
-            # Turn off the fan.
-            #config_data = {'fan_on': False}
-            print('Setting fan state for device', device_id, 'to off.')
+            # Increase temprature
+            config_data = {'increase': True}
+            print('Adjusting minimal temperature for ', device_id, ' to 70.')
         elif data['temperature'] > 72:
-            # Turn on the fan
-            #config_data = {'fan_on': True}
-            print('Setting fan state for device', device_id, 'to on.')
+            # Decrease temperature
+            config_data = {'increase': False}
+            print('Adjusting maximum temperature for ', device_id, ' to 72.')
         else:
             # Temperature is OK, don't need to push a new config.
-            print ('Temperature measure is optimal')
+            print ('Temperature is between the optimal rand of 70 to 72')
             return
 
         config_data_json = json.dumps(config_data)
