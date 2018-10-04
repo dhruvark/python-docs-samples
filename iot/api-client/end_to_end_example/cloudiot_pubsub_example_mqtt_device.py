@@ -182,11 +182,12 @@ class Device(object):
         # The device will receive its latest config when it subscribes to the
         # config topic. If there is no configuration for the device, the device
         # will receive a config with an empty payload.
-        if not payload:
-            return
 
-        # The config is passed in the payload of the message. In this example,
-        # the server sends a serialized JSON string.
+    if not payload:
+        return
+
+    # The config is passed in the payload of the message. In this example,
+    # the server sends a serialized JSON string.
         data = json.loads(payload)
         value1 = data.get('decrease')
         value2 = data.get('increase')
