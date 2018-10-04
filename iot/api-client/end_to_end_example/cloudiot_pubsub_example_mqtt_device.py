@@ -111,7 +111,7 @@ class Device(object):
         self.mintemp = 70
         self.maxtemp = 74
         self.increase = False
-        nonlocal self.decrease = False
+        self.decrease = ''
         self.connected = False
         print(self.increase, self.decrease)
 
