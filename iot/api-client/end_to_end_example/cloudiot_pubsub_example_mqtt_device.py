@@ -180,6 +180,7 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
+        print(data)
         if data['increase']:
             print('Increasing temp')
         elif data['decrease']:
