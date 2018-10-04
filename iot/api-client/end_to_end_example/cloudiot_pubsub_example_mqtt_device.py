@@ -253,6 +253,7 @@ def get_client(
                                cloud_region,
                                registry_id,
                                device_id)))
+    print(client)
     # With Google Cloud IoT Core, the username field is ignored, and the
     # password field is used to transmit a JWT to authorize the device.
     client.username_pw_set(
