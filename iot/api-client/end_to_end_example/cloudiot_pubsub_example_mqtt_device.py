@@ -120,12 +120,10 @@ class Device(object):
         """
         if self.increase:
             self.mintemp = 70
-            self.increase = False
         elif self.decrease:
             self.maxtemp = 72
-            self.decrease = False
         else:
-            # do nothing and proceed
+            pass
 
     def wait_for_connection(self, timeout):
         """Wait for the device to become connected."""
