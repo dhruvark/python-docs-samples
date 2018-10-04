@@ -289,8 +289,16 @@ def main():
     args = parse_command_line_args()
     global minimum_backoff_time
 
+    # Publish to the events or state topic based on the flag.
+    sub_topic = 'events' if args.message_type == 'event' else 'state'
+    mqtt_topic = '/devices/{}/{}'.format(args.device_id, sub_topic)
+
     jwt_iat = datetime.datetime.utcnow()
     jwt_exp_mins = args.jwt_expires_minutes
+    client = get_client(
+        args.project_id, args.cloud_region, args.registry_id, args.device_id,
+        args.private_key_file, args.algorithm, args.ca_certs,
+        args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
     # Create the MQTT client and connect to Cloud IoT.
     client = mqtt.Client(
