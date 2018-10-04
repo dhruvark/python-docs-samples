@@ -276,7 +276,6 @@ def main():
         client.on_message = device.on_message
 
         client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
-	print(client)
         return client
 
     client = get_client(
@@ -295,7 +294,7 @@ def main():
     mqtt_config_topic = '/devices/{}/config'.format(args.device_id)
 
     # Wait up to 5 seconds for the device to connect.
-    device.wait_for_connection(5)
+    #device.wait_for_connection(5)
 
     # Subscribe to the config topic.
     client.subscribe(mqtt_config_topic, qos=1)
