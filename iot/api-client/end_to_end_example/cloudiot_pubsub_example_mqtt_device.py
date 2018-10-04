@@ -197,6 +197,7 @@ class Device(object):
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
             self.decrease = value1
+            self.mintemp = 72
             print('trying to change value of decrease', self.decrease)
         elif value2:
             self.increase = value2
@@ -327,6 +328,7 @@ def main():
     #device.wait_for_connection(5)
 
     device = Device()
+
     # Update and publish temperature readings at a rate of one per second.
     for _ in range(args.num_messages):
         
@@ -355,6 +357,7 @@ def main():
         sim_humidity = random.uniform(20, 30)
         sim_pressure = random.uniform(45, 50)
         sim_dewpoint = random.uniform(60, 70)
+        
 		
 		
         # In an actual device, this would read the device's sensors. Here,############################################
