@@ -251,7 +251,7 @@ def get_client(
                                cloud_region,
                                registry_id,
                                device_id)))
-    print(client)
+
     # With Google Cloud IoT Core, the username field is ignored, and the
     # password field is used to transmit a JWT to authorize the device.
     client.username_pw_set(
@@ -266,10 +266,6 @@ def get_client(
     # describes additional callbacks that Paho supports. In this example, the
     # callbacks just print to standard out.
     device = Device()
-
-    print(device)
-    print(device.on_connect)
-    print(device.on_disconnect)
 
     client.on_connect = device.on_connect
     client.on_publish = device.on_publish
