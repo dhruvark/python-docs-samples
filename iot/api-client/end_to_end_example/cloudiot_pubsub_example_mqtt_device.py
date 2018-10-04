@@ -325,24 +325,26 @@ def main():
 
     # Update and publish temperature readings at a rate of one per second.
     for _ in range(args.num_messages):
-
+        
         client.loop_start()
 
-        for i in range(1, args.num_messages + 1):
+        device.update_sensor_data()
+
+
         # Process network events.
         # Wait if backoff is required.
-            if should_backoff:
-                # If backoff time is too large, give up.
-                if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
-                    print('Exceeded maximum backoff time. Giving up.')
-                    break
+        if should_backoff:
+            # If backoff time is too large, give up.
+            if minimum_backoff_time > MAXIMUM_BACKOFF_TIME:
+                print('Exceeded maximum backoff time. Giving up.')
+                break
 
-                # Otherwise, wait and connect again.
-                delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
-                print('Waiting for {} before reconnecting.'.format(delay))
-                time.sleep(delay)
-                minimum_backoff_time *= 2
-                client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+            # Otherwise, wait and connect again.
+            delay = minimum_backoff_time + random.randint(0, 1000) / 1000.0
+            print('Waiting for {} before reconnecting.'.format(delay))
+            time.sleep(delay)
+            minimum_backoff_time *= 2
+            client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
         
 	################# Metric Simulation ##########################################################################
 	#sim_temp = random.uniform(device.mintemp, device.maxtemp)
@@ -353,7 +355,7 @@ def main():
 		
         # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
-        device.update_sensor_data()
+        
         sim_temp = random.uniform(device.mintemp, device.maxtemp)
 
         # Report the device's temperature to the server by serializing it
