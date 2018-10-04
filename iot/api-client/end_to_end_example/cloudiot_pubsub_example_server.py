@@ -93,11 +93,11 @@ class Server(object):
             print('Adjusting minimal temperature for ', device_id, ' to 70.')
         elif data['temperature'] > 72:
             # Decrease temperature
-            config_data = {'increase': False}
+            config_data = {'decrease': True}
             print('Adjusting maximum temperature for ', device_id, ' to 72.')
         else:
             # Temperature is OK, don't need to push a new config.
-            print ('Temperature is between the optimal rand of 70 to 72')
+            print ('Temperature is between the optimal range of 70 to 72')
             return
 
         config_data_json = json.dumps(config_data)

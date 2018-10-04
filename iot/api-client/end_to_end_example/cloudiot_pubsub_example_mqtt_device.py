@@ -343,7 +343,7 @@ def main():
         
         client.publish(mqtt_telemetry_topic, jsonpayload, qos=1)
         # Send events every second.
-        time.sleep(60 if args.message_type == 'event' else 5)
+        time.sleep(20 if args.message_type == 'event' else 5)
 
     client.disconnect()
     client.loop_stop()
