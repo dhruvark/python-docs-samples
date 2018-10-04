@@ -153,7 +153,7 @@ class Device(object):
 
     def on_publish(self, unused_client, unused_userdata, unused_mid):
         """Callback when the device receives a PUBACK from the MQTT bridge."""
-        print('Published message acked.')
+        print('Published message - ACK received')
 
     def on_subscribe(self, unused_client, unused_userdata, unused_mid,
                      granted_qos):
@@ -358,6 +358,7 @@ def main():
                 args.registry_id, args.device_id, args.private_key_file,
                 args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
                 args.mqtt_bridge_port)
+        print('printing get_Client call', client)
         # [END iot_mqtt_jwt_refresh]
         # Publish "payload" to the MQTT topic. qos=1 means at least once
         # delivery. Cloud IoT Core also supports qos=0 for at most once
