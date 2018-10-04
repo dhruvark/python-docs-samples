@@ -120,8 +120,13 @@ class Device(object):
         """
         if self.increase:
             self.mintemp = 70
-        elif self.decrease:
+            print('min temp adjusted')
+        else:
+            pass
+        
+        if self.decrease:
             self.maxtemp = 72
+            print('max temp adjusted')
         else:
             pass
 
@@ -180,14 +185,12 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
+        print('Message Recieved -->', data)
         #if data['increase'] != self.increase: #incerase = true
             # If changing the state of the fan, print a message and
             # update the internal state.
             #self.increase = data['increase']
-        if self.increase:
-                print('Min temp adjusted')
-        else:
-                print('Max temp adjusted')
+
 
 
 def parse_command_line_args():
