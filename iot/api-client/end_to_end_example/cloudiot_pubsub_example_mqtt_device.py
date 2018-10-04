@@ -107,8 +107,8 @@ class Device(object):
     """Represents the state of a single device."""
 
     def __init__(self):
-        self.mintemp = 69
-        self.maxtemp = 72
+        self.mintemp = 70
+        self.maxtemp = 74
         self.increase = False
         self.decrease = False
         self.connected = False
@@ -341,7 +341,7 @@ def main():
 		
         # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
-        device.update_sensor_data()
+        #device.update_sensor_data()
         sim_temp = random.uniform(device.mintemp, device.maxtemp)
 
         # Report the device's temperature to the server by serializing it
