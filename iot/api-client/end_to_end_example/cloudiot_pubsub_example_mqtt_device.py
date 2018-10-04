@@ -187,13 +187,14 @@ class Device(object):
         # the server sends a serialized JSON string.
         data = json.loads(payload)
         data2 = yaml.safe_load(payload)
-        print('Message Recieved from temp. trigger -->', data)
         print('Message Recieved from temp. trigger -->', data2)
         #print (var)
         #if data['increase'] != self.increase: #incerase = true
             # If changing the state of the fan, print a message and
             # update the internal state.
             #self.increase = data['increase']
+        if data2['increase']:
+            print('INCCREASEEEEEEEEEE')
         
 
 
