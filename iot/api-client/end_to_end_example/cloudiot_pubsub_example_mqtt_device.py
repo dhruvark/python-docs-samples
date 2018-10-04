@@ -186,15 +186,12 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
-        value = data.get('decrease')
-        print(value)
-        data2 = yaml.safe_load(payload)
+        value1 = data.get('decrease')
+        value2 = data.get('increase')
+        #print(value)
+        #data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data2)
-        #print (var)
-        #if data['increase'] != self.increase: #incerase = true
-            # If changing the state of the fan, print a message and
-            # update the internal state.
-            #self.increase = data['increase']      
+     
 
 
 def parse_command_line_args():
