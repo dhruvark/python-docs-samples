@@ -286,6 +286,7 @@ def main():
 
     client.loop_start()
 
+	device = Device()
     # This is the topic that the device will publish telemetry events
     # (temperature data) to.
     mqtt_telemetry_topic = '/devices/{}/events'.format(args.device_id)
