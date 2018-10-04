@@ -195,9 +195,9 @@ class Device(object):
         data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
-            self.decrease = True
+            self.decrease = value2
         elif value2:
-            self.increase = True
+            self.increase = value1
         else:
             print('PAASSSSS')
             
