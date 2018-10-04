@@ -111,7 +111,7 @@ class Device(object):
         self.mintemp = 70
         self.maxtemp = 74
         self.increase = False
-        self.decrease = False
+        nonlocal self.decrease = False
         self.connected = False
         print(self.increase, self.decrease)
 
@@ -197,7 +197,6 @@ class Device(object):
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
             self.decrease = value1
-            self.maxtemp = 72
             print('trying to change value of decrease', self.decrease)
         elif value2:
             self.increase = value2
