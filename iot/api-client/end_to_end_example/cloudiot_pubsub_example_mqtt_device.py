@@ -180,7 +180,7 @@ class Device(object):
         #if data['increase'] != self.increase: #incerase = true
             # If changing the state of the fan, print a message and
             # update the internal state.
-            self.increase = data['increase']
+            #self.increase = data['increase']
         if self.increase:
                 print('Min temp adjusted')
         else:
