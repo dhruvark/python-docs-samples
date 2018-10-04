@@ -304,7 +304,7 @@ def main():
         args.private_key_file, args.algorithm, args.ca_certs,
         args.mqtt_bridge_hostname, args.mqtt_bridge_port)
     
-
+    device = Device()
     # Wait up to 5 seconds for the device to connect.############### DIFF 1
     device.wait_for_connection(5)
 
@@ -365,7 +365,7 @@ def main():
         
         client.publish(mqtt_telemetry_topic, jsonpayload, qos=1)
         # Send events every second.
-        time.sleep(3 if args.message_type == 'event' else 5)
+        time.sleep(30 if args.message_type == 'event' else 5)
 
     client.disconnect()   ########## Diff 2
     client.loop_stop()     ########## Diff 3
