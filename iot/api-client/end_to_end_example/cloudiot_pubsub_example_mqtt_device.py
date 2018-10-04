@@ -251,8 +251,8 @@ def main():
 
     # Create the MQTT client and connect to Cloud IoT.
     def get_client(
-        args.project_id, args.cloud_region, args.registry_id, args.device_id, args.private_key_file,
-        args.algorithm, args.ca_certs, args.mqtt_bridge_hostname, args.mqtt_bridge_port):
+        project_id, cloud_region, registry_id, device_id, private_key_file,
+        algorithm, ca_certs, mqtt_bridge_hostname, mqtt_bridge_port):
         client = mqtt.Client(
             client_id='projects/{}/locations/{}/registries/{}/devices/{}'.format(
                 args.project_id,
