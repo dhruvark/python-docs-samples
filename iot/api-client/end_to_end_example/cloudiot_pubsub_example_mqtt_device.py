@@ -196,6 +196,7 @@ class Device(object):
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
             self.decrease = value2
+            print('trying to change value of decrease', self.decrease)
         elif value2:
             self.increase = value1
         else:
