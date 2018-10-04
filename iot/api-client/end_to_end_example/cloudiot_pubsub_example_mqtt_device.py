@@ -291,7 +291,8 @@ def get_client(
 def main():
     args = parse_command_line_args()
     global minimum_backoff_time
-
+    device = Device()
+    
     # Publish to the events or state topic based on the flag.
     sub_topic = 'events' if args.message_type == 'event' else 'state'
     mqtt_topic = '/devices/{}/{}'.format(args.device_id, sub_topic)
