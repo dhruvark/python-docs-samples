@@ -188,7 +188,8 @@ class Device(object):
         data = json.loads(payload)
         value1 = data.get('decrease')
         value2 = data.get('increase')
-        #print(value)
+        print(value1)
+        print(value2)
         data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data2)
      
