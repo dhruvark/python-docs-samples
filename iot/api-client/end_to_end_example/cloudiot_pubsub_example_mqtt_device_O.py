@@ -130,7 +130,7 @@ class Device(object):
         # config topic. If there is no configuration for the device, the device
         # will receive a config with an empty payload.
         print(payload)
-		if not payload:
+	    if not payload:
             return
 
         # The config is passed in the payload of the message. In this example,
