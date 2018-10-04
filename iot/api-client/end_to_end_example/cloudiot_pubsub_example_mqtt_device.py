@@ -110,6 +110,7 @@ class Device(object):
         self.mintemp = 70
         self.maxtemp = 74
         self.increase = False
+        self.decrease = False
         self.connected = False
 
     def update_sensor_data(self):
@@ -119,8 +120,10 @@ class Device(object):
         """
         if self.increase:
             self.mintemp = 70
-        else:
+        elif self.decrease:
             self.maxtemp = 72
+        else:
+            pass
 
     def wait_for_connection(self, timeout):
         """Wait for the device to become connected."""
