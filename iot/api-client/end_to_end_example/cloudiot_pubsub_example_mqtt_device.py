@@ -197,7 +197,7 @@ class Device(object):
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
             self.decrease = value1
-            self.mintemp = 72
+            self.maxtemp = 72
             print('trying to change value of decrease', self.decrease)
         elif value2:
             self.increase = value2
@@ -362,7 +362,7 @@ def main():
 		
         # In an actual device, this would read the device's sensors. Here,############################################
         # you update the temperature based on whether the fan is on.
-        
+        print(device.maxtemp)
         sim_temp = random.uniform(device.mintemp, device.maxtemp)
 
         # Report the device's temperature to the server by serializing it
