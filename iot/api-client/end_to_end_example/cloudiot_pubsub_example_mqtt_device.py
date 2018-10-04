@@ -119,6 +119,7 @@ class Device(object):
         If the fan is on, assume the temperature decreased one degree,
         otherwise assume that it increased one degree.
         """
+        print('function coming here')
         if self.increase:
             self.mintemp = 70
             print('min temp adjusted')
@@ -130,6 +131,7 @@ class Device(object):
             print('max temp adjusted')
         else:
             pass
+            print('I am passing')
 
     def wait_for_connection(self, timeout):
         """Wait for the device to become connected."""
