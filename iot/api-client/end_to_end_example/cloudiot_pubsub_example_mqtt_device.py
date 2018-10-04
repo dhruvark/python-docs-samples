@@ -192,11 +192,7 @@ class Device(object):
         #if data['increase'] != self.increase: #incerase = true
             # If changing the state of the fan, print a message and
             # update the internal state.
-            #self.increase = data['increase']
-        if data2['increase']:
-            print('INCCREASEEEEEEEEEE')
-        
-
+            #self.increase = data['increase']      
 
 
 def parse_command_line_args():
