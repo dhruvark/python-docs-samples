@@ -241,29 +241,31 @@ def parse_command_line_args():
 
     return parser.parse_args()
 
-
-def main():
-    args = parse_command_line_args()
-    global minimum_backoff_time
-
-    jwt_iat = datetime.datetime.utcnow()
-    jwt_exp_mins = args.jwt_expires_minutes
-
-    # Create the MQTT client and connect to Cloud IoT.
+def get_client(
+        project_id, cloud_region, registry_id, device_id, private_key_file,
+        algorithm, ca_certs, mqtt_bridge_hostname, mqtt_bridge_port):
+    """Create our MQTT client. The client_id is a unique string that identifies
+    this device. For Google Cloud IoT Core, it must be in the format below."""
     client = mqtt.Client(
-        client_id='projects/{}/locations/{}/registries/{}/devices/{}'.format(
-            args.project_id,
-            args.cloud_region,
-            args.registry_id,
-            args.device_id))
+            client_id=('projects/{}/locations/{}/registries/{}/devices/{}'
+                       .format(
+                               project_id,
+                               cloud_region,
+                               registry_id,
+                               device_id)))
+    # With Google Cloud IoT Core, the username field is ignored, and the
+    # password field is used to transmit a JWT to authorize the device.
     client.username_pw_set(
         username='unused',
         password=create_jwt(
-            args.project_id,
-            args.private_key_file,
-            args.algorithm))
-    client.tls_set(ca_certs=args.ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
+            project_id, private_key_file, algorithm))
 
+    # Enable SSL/TLS support.
+    client.tls_set(ca_certs=ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
+
+    # Register message callbacks. https://eclipse.org/paho/clients/python/docs/
+    # describes additional callbacks that Paho supports. In this example, the
+    # callbacks just print to standard out.
     device = Device()
 
     client.on_connect = device.on_connect
@@ -272,25 +274,45 @@ def main():
     client.on_subscribe = device.on_subscribe
     client.on_message = device.on_message
 
-    client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+    # Connect to the Google MQTT bridge.
+    client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
 
-    client.loop_start()
+    # This is the topic that the device will receive configuration updates on.
+    mqtt_config_topic = '/devices/{}/config'.format(device_id)
+
+    # Subscribe to the config topic.
+    client.subscribe(mqtt_config_topic, qos=1)
+
+    return client
+# [END iot_mqtt_config]
+
+
+def main():
+    args = parse_command_line_args()
+    global minimum_backoff_time
 
     # This is the topic that the device will publish telemetry events
     # (temperature data) to.
     mqtt_telemetry_topic = '/devices/{}/events'.format(args.device_id)
 
-    # This is the topic that the device will receive configuration updates on.
-    mqtt_config_topic = '/devices/{}/config'.format(args.device_id)
+    jwt_iat = datetime.datetime.utcnow()
+    jwt_exp_mins = args.jwt_expires_minutes
 
-    # Wait up to 5 seconds for the device to connect.
+    # Create the MQTT client and connect to Cloud IoT.
+    client = get_client(
+        args.project_id, args.cloud_region, args.registry_id, args.device_id,
+        args.private_key_file, args.algorithm, args.ca_certs,
+        args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+    
+
+    # Wait up to 5 seconds for the device to connect.############### DIFF 1
     device.wait_for_connection(5)
 
-    # Subscribe to the config topic.
-    client.subscribe(mqtt_config_topic, qos=1)
 
     # Update and publish temperature readings at a rate of one per second.
     for _ in range(args.num_messages):
+
+        client.loop_start()
 
         for i in range(1, args.num_messages + 1):
         # Process network events.
@@ -308,8 +330,8 @@ def main():
                 minimum_backoff_time *= 2
                 client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
         
-		################# Metric Simulation ##########################################################################
-		#sim_temp = random.uniform(device.mintemp, device.maxtemp)
+	################# Metric Simulation ##########################################################################
+	#sim_temp = random.uniform(device.mintemp, device.maxtemp)
         sim_humidity = random.uniform(20, 30)
         sim_pressure = random.uniform(45, 50)
         sim_dewpoint = random.uniform(60, 70)
@@ -345,8 +367,8 @@ def main():
         # Send events every second.
         time.sleep(3 if args.message_type == 'event' else 5)
 
-    client.disconnect()
-    client.loop_stop()
+    client.disconnect()   ########## Diff 2
+    client.loop_stop()     ########## Diff 3
     print('Finished loop successfully. Goodbye!')
 
 
