@@ -186,7 +186,7 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
-        Value = data.get('decrease')
+        value = data.get('decrease')
         print(value)
         data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data2)
