@@ -272,6 +272,8 @@ def get_client(
     client.on_subscribe = device.on_subscribe
     client.on_message = device.on_message
 
+    device = Device()
+    
     # Connect to the Google MQTT bridge.
     client.connect(mqtt_bridge_hostname, mqtt_bridge_port)
 
@@ -300,30 +302,6 @@ def main():
         args.private_key_file, args.algorithm, args.ca_certs,
         args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
-    # Create the MQTT client and connect to Cloud IoT.
-    client = mqtt.Client(
-        client_id='projects/{}/locations/{}/registries/{}/devices/{}'.format(
-            args.project_id,
-            args.cloud_region,
-            args.registry_id,
-            args.device_id))
-    client.username_pw_set(
-        username='unused',
-        password=create_jwt(
-            args.project_id,
-            args.private_key_file,
-            args.algorithm))
-    client.tls_set(ca_certs=args.ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
-
-    device = Device()
-
-    client.on_connect = device.on_connect
-    client.on_publish = device.on_publish
-    client.on_disconnect = device.on_disconnect
-    client.on_subscribe = device.on_subscribe
-    client.on_message = device.on_message
-
-    client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
     client.loop_start()
 
