@@ -113,7 +113,7 @@ class Device(object):
         self.increase = False
         self.decrease = False
         self.connected = False
-        print(self.increase, self.decrease)
+        print(self.increaase, self.decrease)
 
     def update_sensor_data(self):
         """Pretend to read the device's sensor data.
@@ -320,7 +320,7 @@ def main():
         args.private_key_file, args.algorithm, args.ca_certs,
         args.mqtt_bridge_hostname, args.mqtt_bridge_port)
     
-    device = Device()
+    
     # Wait up to 5 seconds for the device to connect.############### DIFF 1
     #device.wait_for_connection(5)
 
@@ -329,7 +329,7 @@ def main():
     for _ in range(args.num_messages):
         
         client.loop_start()
-
+        device = Device()
         device.update_sensor_data()
 
 
