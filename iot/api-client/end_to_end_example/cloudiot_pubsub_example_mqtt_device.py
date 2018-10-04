@@ -113,13 +113,13 @@ class Device(object):
         self.increase = False
         self.decrease = False
         self.connected = False
+        print(self.increaase, self.decrease)
 
     def update_sensor_data(self):
         """Pretend to read the device's sensor data.
         If the fan is on, assume the temperature decreased one degree,
         otherwise assume that it increased one degree.
         """
-        print('function coming here')
         if self.increase:
             self.mintemp = 70
             print('min temp adjusted')
