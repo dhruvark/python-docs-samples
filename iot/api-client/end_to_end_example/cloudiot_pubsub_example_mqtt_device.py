@@ -107,7 +107,7 @@ class Device(object):
     """Represents the state of a single device."""
 
     def __init__(self):
-        self.mintemp = 70
+        self.mintemp = 68
         self.maxtemp = 72
         self.increase = False
         self.connected = False
