@@ -118,7 +118,7 @@ class Device(object):
         otherwise assume that it increased one degree.
         """
         if self.increase:
-            self.mintemp = 70
+            self.mintemp = 69
         else:
             self.maxtemp = 72
 
