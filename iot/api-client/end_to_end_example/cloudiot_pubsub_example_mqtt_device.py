@@ -326,12 +326,12 @@ def main():
     # Wait up to 5 seconds for the device to connect.############### DIFF 1
     #device.wait_for_connection(5)
 
-
+    device = Device()
     # Update and publish temperature readings at a rate of one per second.
     for _ in range(args.num_messages):
         
         client.loop_start()
-        device = Device()
+        
         device.update_sensor_data()
 
 
