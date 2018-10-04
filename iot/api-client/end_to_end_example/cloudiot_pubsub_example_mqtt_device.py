@@ -111,7 +111,7 @@ class Device(object):
         self.mintemp = 70
         self.maxtemp = 74
         self.increase = False
-        self.decrease = ''
+        self.decrease = False
         self.connected = False
         print(self.increase, self.decrease)
 
@@ -196,10 +196,10 @@ class Device(object):
         data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data2)
         if value1:
-            self.decrease = value1
+            self.decrease == value1
             print('trying to change value of decrease', self.decrease)
         elif value2:
-            self.increase = value2
+            self.increase == value2
         else:
             print('PAASSSSS')
             
