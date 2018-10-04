@@ -235,7 +235,7 @@ def parse_command_line_args():
               'telemetry event or a device state message.'))
     parser.add_argument(
         '--jwt_expires_minutes',
-        default=2,
+        default=1,
         type=int,
         help=('Expiration time, in minutes, for JWT tokens.'))
 
@@ -250,42 +250,32 @@ def main():
     jwt_exp_mins = args.jwt_expires_minutes
 
     # Create the MQTT client and connect to Cloud IoT.
-    def get_client(
-        project_id, cloud_region, registry_id, device_id, private_key_file,
-        algorithm, ca_certs, mqtt_bridge_hostname, mqtt_bridge_port):
-        client = mqtt.Client(
-            client_id='projects/{}/locations/{}/registries/{}/devices/{}'.format(
-                args.project_id,
-                args.cloud_region,
-                args.registry_id,
-                args.device_id))
-        client.username_pw_set(
-            username='unused',
-            password=create_jwt(
-                args.project_id,
-                args.private_key_file,
-                args.algorithm))
-        client.tls_set(ca_certs=args.ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
+    client = mqtt.Client(
+        client_id='projects/{}/locations/{}/registries/{}/devices/{}'.format(
+            args.project_id,
+            args.cloud_region,
+            args.registry_id,
+            args.device_id))
+    client.username_pw_set(
+        username='unused',
+        password=create_jwt(
+            args.project_id,
+            args.private_key_file,
+            args.algorithm))
+    client.tls_set(ca_certs=args.ca_certs, tls_version=ssl.PROTOCOL_TLSv1_2)
 
-        device = Device()
+    device = Device()
 
-        client.on_connect = device.on_connect
-        client.on_publish = device.on_publish
-        client.on_disconnect = device.on_disconnect
-        client.on_subscribe = device.on_subscribe
-        client.on_message = device.on_message
+    client.on_connect = device.on_connect
+    client.on_publish = device.on_publish
+    client.on_disconnect = device.on_disconnect
+    client.on_subscribe = device.on_subscribe
+    client.on_message = device.on_message
 
-        client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
-        return client
-
-    client = get_client(
-        args.project_id, args.cloud_region, args.registry_id, args.device_id,
-        args.private_key_file, args.algorithm, args.ca_certs,
-        args.mqtt_bridge_hostname, args.mqtt_bridge_port)
+    client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
 
     client.loop_start()
 
-    device = Device()
     # This is the topic that the device will publish telemetry events
     # (temperature data) to.
     mqtt_telemetry_topic = '/devices/{}/events'.format(args.device_id)
@@ -294,7 +284,7 @@ def main():
     mqtt_config_topic = '/devices/{}/config'.format(args.device_id)
 
     # Wait up to 5 seconds for the device to connect.
-    #device.wait_for_connection(5)
+    device.wait_for_connection(5)
 
     # Subscribe to the config topic.
     client.subscribe(mqtt_config_topic, qos=1)
@@ -353,7 +343,7 @@ def main():
         
         client.publish(mqtt_telemetry_topic, jsonpayload, qos=1)
         # Send events every second.
-        time.sleep(60 if args.message_type == 'event' else 5)
+        time.sleep(3 if args.message_type == 'event' else 5)
 
     client.disconnect()
     client.loop_stop()
