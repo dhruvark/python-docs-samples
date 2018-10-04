@@ -185,8 +185,8 @@ class Server(object):
 
         # The subscriber is non-blocking, so keep the main thread from
         # exiting to allow it to process messages in the background.
-        while True:
-            time.sleep(60)
+        #while True:
+        #    time.sleep(60)
 
 
 def parse_command_line_args():
