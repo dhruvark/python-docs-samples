@@ -89,11 +89,11 @@ class Server(object):
               'of: {}'.format(device_id, data['temperature']))
         if data['temperature'] < 70:
             # Increase temprature
-            config_data = {'increase': True}
+            #config_data = {'increase': True}
             print('Adjusting minimal temperature for ', device_id, ' to 70.')
         elif data['temperature'] > 72:
             # Decrease temperature
-            config_data = {'decrease': True}
+            #config_data = {'decrease': True}
             print('Adjusting maximum temperature for ', device_id, ' to 72.')
         else:
             # Temperature is OK, don't need to push a new config.
