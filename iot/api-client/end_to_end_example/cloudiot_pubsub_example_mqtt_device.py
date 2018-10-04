@@ -367,8 +367,8 @@ def main():
         # Send events every second.
         time.sleep(30 if args.message_type == 'event' else 5)
 
-    client.disconnect()   ########## Diff 2
-    client.loop_stop()     ########## Diff 3
+    #client.disconnect()   ########## Diff 2
+    #client.loop_stop()     ########## Diff 3
     print('Finished loop successfully. Goodbye!')
 
 
