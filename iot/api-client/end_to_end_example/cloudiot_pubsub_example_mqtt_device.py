@@ -276,7 +276,7 @@ def main():
         client.on_message = device.on_message
 
         client.connect(args.mqtt_bridge_hostname, args.mqtt_bridge_port)
-		print(client)
+	print(client)
         return client
 
     client = get_client(
