@@ -113,7 +113,7 @@ class Device(object):
         self.increase = False
         self.decrease = False
         self.connected = False
-        print(self.increaase, self.decrease)
+        print(self.increase, self.decrease)
 
     def update_sensor_data(self):
         """Pretend to read the device's sensor data.
