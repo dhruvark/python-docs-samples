@@ -268,6 +268,10 @@ def get_client(
     # callbacks just print to standard out.
     device = Device()
 
+    print(device)
+    print(device.on_connect)
+    print(device.on_disconnect)
+
     client.on_connect = device.on_connect
     client.on_publish = device.on_publish
     client.on_disconnect = device.on_disconnect
@@ -358,7 +362,6 @@ def main():
                 args.registry_id, args.device_id, args.private_key_file,
                 args.algorithm, args.ca_certs, args.mqtt_bridge_hostname,
                 args.mqtt_bridge_port)
-        print('printing get_Client call', client)
         # [END iot_mqtt_jwt_refresh]
         # Publish "payload" to the MQTT topic. qos=1 means at least once
         # delivery. Cloud IoT Core also supports qos=0 for at most once
