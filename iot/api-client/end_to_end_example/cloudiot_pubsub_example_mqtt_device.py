@@ -50,6 +50,7 @@ import time
 import random
 import jwt
 import paho.mqtt.client as mqtt
+import yaml
 
 
 # The initial backoff time after a disconnection occurs, in seconds.
@@ -185,8 +186,9 @@ class Device(object):
         # The config is passed in the payload of the message. In this example,
         # the server sends a serialized JSON string.
         data = json.loads(payload)
+        data2 = yaml.safe_load(payload)
         print('Message Recieved from temp. trigger -->', data)
-        var = data[u'increase']
+        print('Message Recieved from temp. trigger -->', data)
         #print (var)
         #if data['increase'] != self.increase: #incerase = true
             # If changing the state of the fan, print a message and
